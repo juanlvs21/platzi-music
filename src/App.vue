@@ -29,4 +29,7 @@ export default {
   .mrl-5 {
     margin: 0px 5px;
   }
+  .ml-5 {
+    margin-left: 5px!important;
+  }
 </style>

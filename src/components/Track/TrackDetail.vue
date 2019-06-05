@@ -3,9 +3,43 @@
 
     <PmLoader v-if="isLoading"></PmLoader>
 
-    <div class="columns">
-      <div class="column is-6 is-offset-3">
-        <PmTrack :track="track"></PmTrack>
+    <div class="columns" v-if="track && track.album">
+      <div class="column is-3 has-text-centered">
+        <!-- <PmTrack :track="track"></PmTrack> -->
+        <figure class="media-left">
+          <p class="image">
+            <img :src="track.album.images[0].url" alt="">
+          </p>
+          <div>
+            <button class="button is-info is-small mrl-5 mt-20" @click="selectTrack">
+              Reproducir <span class="icon is-small ml-5">▶️</span>
+            </button>
+          </div>
+        </figure>
+      </div>
+      <div class="column is-8">
+        <div class="panel">
+          <div class="panel-heading">
+            <h1>{{ track.name }}</h1>
+          </div>
+          <div class="panel-block">
+            <article class="media">
+              <div class="media-content">
+                <div class="content">
+                  <ul v-for="(v,k) in track" v-bind:key="k">
+                    <b>{{ k }}:&nbsp;</b>
+                    <span>{{ v }}</span>
+                  </ul>
+                </div>
+              </div>
+              <nav class="level">
+                <div class="level-left">
+                  <a href="" class="level-item"></a>
+                </div>
+              </nav>
+            </article>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -17,19 +51,20 @@
 </template>
 
 <script>
-import PmTrack from './Track.vue'
 import PmLoader from '../shared/Loader.vue'
 import PmNotification from '../shared/Notification'
 
 import trackService from '../../services/track'
 
+import trackMixin from '../../mixins/track'
+
 export default {
   name: 'PmTrackDetails',
   components: {
-    PmTrack,
     PmLoader,
     PmNotification,
   },
+  mixins: [ trackMixin ],
   data() {
     return {
         track: {},

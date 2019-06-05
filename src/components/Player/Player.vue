@@ -5,7 +5,7 @@
       </p>
       <p>
         <b> {{ track.name }} </b>
-        <small> {{ track.duration_ms }} </small>
+        <small> [{{ track.duration_ms | ms-to-mm }}] </small>
       </p>
       <p>
         <audio :src="track.preview_url" controls></audio>

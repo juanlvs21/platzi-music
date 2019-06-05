@@ -27,7 +27,7 @@
 
         <div class="columns is-multiline">
           <div class="column is-one-quarter" v-for="t in tracks" v-bind:key="t.id">
-            <PmTrack :track="t" @select="setSelectedTrack" :class="{ 'is-active': t.id == selectedTrack }"></PmTrack>
+            <PmTrack :track="t" @select="setSelectedTrack" :class="{ 'is-active': t.id == selectedTrack }" v-blur="t.preview_url"></PmTrack>
           </div>
         </div>
       </div>

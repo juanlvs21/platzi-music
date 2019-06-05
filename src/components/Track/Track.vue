@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="content">
-        <small>{{ track.duration_ms }}</small>
+        <small>Duración: <b>{{ track.duration_ms | ms-to-mm }}</b></small>
       </div>
       <nav class="level center-element">
         <div class="level-left">
@@ -39,21 +39,18 @@
 </template>
 
 <script>
+import trackMixin from '../../mixins/track'
+
 export default {
   name: 'PmTrack',
   props: {
-    // msg: String,
     track: {
       type: Object,
       required: true,
     }
   },
+  mixins: [ trackMixin ],
   methods: {
-    selectTrack() {
-      this.$emit('select', this.track.id)
-
-      this.$bus.$emit('set-track', this.track)
-    },
     goToTrack(id) {
       this.$router.push({
         name: 'track',
@@ -68,10 +65,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.ml-5 {
-  margin-left: 5px!important;
-}
-.center-element {
-  justify-content:center;
-}
+  .center-element {
+    justify-content:center;
+  }
 </style>
