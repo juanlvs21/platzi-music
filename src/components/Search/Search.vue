@@ -1,12 +1,13 @@
 <template>
   <main>
-
     <section class="section">
       <nav class="nav has-shadow">
         <div class="container has-text-centered">
           <input type="text" class="input is-medium is-rounded" placeholder="Buscar canciones" v-model='searchQuery' @keyup.enter="search">
-          
-          <PmLoader v-show="isLoading"></PmLoader>
+
+          <transition name="fade">
+            <PmLoader v-show="isLoading"></PmLoader>
+          </transition>
 
           <div class="mt-20">
             <button class="button is-info is-medium mrl-5" @click="search">Buscar</button>
@@ -21,9 +22,11 @@
           <h3 class="font-22 mb-10">{{ searchMessage }}</h3>
         </div>
 
-        <PmNotification v-show="showNotification">
+        <transition name="fade-left">
+          <PmNotification v-show="showNotification">
             <p slot="body">{{ messageNotification }}</p>
-        </PmNotification>
+          </PmNotification>
+        </transition>
 
         <div class="columns is-multiline">
           <div class="column is-one-quarter" v-for="t in tracks" v-bind:key="t.id">
@@ -90,18 +93,18 @@ export default {
 
       trackService.search(this.searchQuery)
         .then((res) => {
+          this.isLoading = false
           this.showNotification = res.tracks.total === 0
           if (this.showNotification) {
             this.messageNotification = 'No se encontraron resultados'
           }
 
           this.tracks = res.tracks.items
-          this.isLoading = false
           this.showTotalResults = true
         })
         .catch(() => {
-          this.showNotification = true
           this.isLoading = false
+          this.showNotification = true
           this.messageNotification = 'No se pudo conectar al servidor'
         })
     },
