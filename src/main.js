@@ -6,6 +6,7 @@ import msToMm from './filters/ms-to-mm'
 import blur from './directives/blur'
 
 import routes from './routes'
+import store from './store'
 
 import App from './App.vue'
 import './scss/main.scss'
@@ -24,5 +25,6 @@ Vue.config.productionTip = false
 
 new Vue({
     render: h => h(App),
-    router
+    router,
+    store
 }).$mount('#app')

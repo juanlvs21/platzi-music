@@ -20,15 +20,17 @@
       <div class="column is-8">
         <div class="panel">
           <div class="panel-heading">
-            <h1>{{ track.name }}</h1>
+            <h1>{{ trackTitle }}</h1>
           </div>
           <div class="panel-block">
             <article class="media">
               <div class="media-content">
                 <div class="content">
-                  <ul v-for="(v,k) in track" v-bind:key="k">
-                    <b>{{ k }}:&nbsp;</b>
-                    <span>{{ v }}</span>
+                  <ul>
+                    <li v-for="(v,k) in track" v-bind:key="k">
+                      <b>{{ k }}:&nbsp;</b>
+                      <span>{{ v }}</span>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -54,9 +56,9 @@
 import PmLoader from '../shared/Loader.vue'
 import PmNotification from '../shared/Notification'
 
-import trackService from '../../services/track'
-
 import trackMixin from '../../mixins/track'
+
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'PmTrackDetails',
@@ -67,25 +69,35 @@ export default {
   mixins: [ trackMixin ],
   data() {
     return {
-        track: {},
         isLoading: true,
         showNotification: false,
         messageNotification: '',
     }
   },
+  computed: {
+    ...mapState(['track']),
+    ...mapGetters(['trackTitle'])
+  },
+  methods: {
+    ...mapActions(['getTrackById'])
+  },
   created() {
-    const id = this.$route.params.id
     this.isLoading = true
-    trackService.getById(id)
-      .then( res => {
-        this.track = res
+    const id = this.$route.params.id
+
+    if (!this.track || !this.track.id || this.track.id != id) {
+      this.getTrackById({id})
+        .then(() => {
         this.isLoading = false
-      })
-      .catch(() => {
-        this.messageNotification = 'Error desconocido'
-        this.showNotification = true
-        this.isLoading = false
-      })
+          console.log('track loaded...')
+        })
+        .catch(() => {
+          this.messageNotification = 'Error desconocido'
+          this.showNotification = true
+          this.isLoading = false
+        })
+    }
+    if (this.track.id == id) this.isLoading = false
   },
 }
 </script>
