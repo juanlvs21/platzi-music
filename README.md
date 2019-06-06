@@ -1,4 +1,12 @@
 # platzi-music
+Curso Profesional de VueJS de <a href="https://platzi.com/clases/vuejs-profesional/" target="_blank"><i>Platzi</i></a>
+
+`(Este repositorio posee leves modificaciones personales)`
+
+<div align="center">
+<a href="https://jotamusic.now.sh/" target="_blank">Demo aquí</a>
+</div>
+
 
 ## Project setup
 ```
@@ -14,16 +22,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

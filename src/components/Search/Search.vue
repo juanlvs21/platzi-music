@@ -2,18 +2,20 @@
   <main>
     <section class="section">
       <nav class="nav has-shadow">
-        <div class="container has-text-centered">
-          <input type="text" class="input is-medium is-rounded" placeholder="Buscar canciones" v-model='searchQuery' @keyup.enter="search">
+        <transition name="fade-left">
+          <div class="container has-text-centered" v-show="isReady">
+            <input type="text" class="input is-medium is-rounded" placeholder="Buscar canciones" v-model='searchQuery' @keyup.enter="search">
 
-          <transition name="fade">
-            <PmLoader v-show="isLoading"></PmLoader>
-          </transition>
+            <transition name="fade-left">
+              <PmLoader v-show="isLoading"></PmLoader>
+            </transition>
 
-          <div class="mt-20">
-            <button class="button is-info is-medium mrl-5" @click="search">Buscar</button>
-            <button class="button is-danger is-medium mrl-5" @click="clearSearch">&times;</button>
+            <div class="mt-20">
+              <button class="button is-info is-medium mrl-5" @click="search">Buscar</button>
+              <button class="button is-danger is-medium mrl-5" @click="clearSearch">&times;</button>
+            </div>
           </div>
-        </div>
+        </transition>
       </nav>
 
       <div class="container mt-20 has-text-centered">
@@ -28,11 +30,13 @@
           </PmNotification>
         </transition>
 
-        <div class="columns is-multiline">
-          <div class="column is-one-quarter" v-for="t in tracks" v-bind:key="t.id">
-            <PmTrack :track="t" @select="setSelectedTrack" :class="{ 'is-active': t.id == selectedTrack }" v-blur="t.preview_url"></PmTrack>
+        <transition name="fade-left">
+          <div class="columns is-multiline" v-show="showResult">
+            <div class="column is-one-quarter" v-for="t in tracks" v-bind:key="t.id">
+              <PmTrack :track="t" @select="setSelectedTrack" :class="{ 'is-active': t.id == selectedTrack }" v-blur="t.preview_url"></PmTrack>
+            </div>
           </div>
-        </div>
+        </transition>
       </div>
     </section>
 
@@ -61,6 +65,8 @@ export default {
       showTotalResults: false,
       showNotification: false,
       isLoading: false,
+      isReady:false,
+      showResult: false,
 
       selectedTrack: '',
 
@@ -88,7 +94,8 @@ export default {
 
       this.isLoading = true
       this.showTotalResults = false
-      this.showNotification = false
+      this.showNotification = false      
+      this.showResult = false
       this.selectedTrack = ''
 
       trackService.search(this.searchQuery)
@@ -101,10 +108,12 @@ export default {
 
           this.tracks = res.tracks.items
           this.showTotalResults = true
+          this.showResult = true
         })
         .catch(() => {
           this.isLoading = false
           this.showNotification = true
+          this.showResult = false
           this.messageNotification = 'No se pudo conectar al servidor'
         })
     },
@@ -119,6 +128,11 @@ export default {
     setSelectedTrack(id) {
       this.selectedTrack = id
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.isReady = true
+    }, 10);
   },
 }
 </script>
